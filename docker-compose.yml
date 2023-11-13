@@ -1,0 +1,42 @@
+services:
+  # Postgres 서비스 정의
+  postgres:
+    container_name: postgres-sql1             # 커스텀 컨테이너 이름
+    image: postgres                          # Postgres에 사용될 도커 이미지
+    environment:                             # Postgres를 위한 환경 변수
+      POSTGRES_USER: postgres                # 데이터베이스 사용자
+      POSTGRES_PASSWORD: password            # 데이터베이스 비밀번호
+      PGDATA: /data/postgres                 # 컨테이너 내 데이터 디렉토리
+    volumes:                                 # 데이터 지속성을 위한 볼륨 마운트
+      - postgres:/data/postgres
+    ports:                                   # 호스트 포트를 컨테이너 포트에 매핑
+      - "5432:5432"                          # Postgres 기본 포트
+    networks:                                # 'postgres' 네트워크에 연결
+      - postgres
+    restart: unless-stopped                  # 컨테이너 재시작 정책
+
+  # PgAdmin 서비스 정의
+  pgadmin:
+    container_name: pgadmin1                  # PgAdmin을 위한 커스텀 컨테이너 이름
+    image: dpage/pgadmin4                    # PgAdmin에 사용될 도커 이미지
+    environment:                             # PgAdmin을 위한 환경 변수
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}  # 기본 이메일
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}           # 기본 비밀번호
+      PGADMIN_CONFIG_SERVER_MODE: 'False'    # 서버 모드가 아닌 상태로 실행
+    volumes:                                 # PgAdmin 데이터를 위한 볼륨 마운트
+      - pgadmin:/var/lib/pgadmin
+    ports:                                   # 호스트 포트를 컨테이너 포트에 매핑
+      - "5050:80"                            # PgAdmin 기본 웹 포트
+    networks:                                # 'postgres' 네트워크에 연결
+      - postgres
+    restart: unless-stopped                  # 컨테이너 재시작 정책
+
+# 네트워크 정의
+networks:
+  postgres:
+    driver: bridge                           # 네트워크에 브리지 드라이버 사용
+
+# 볼륨 정의
+volumes:
+  postgres:                                  # Postgres 데이터를 위한 볼륨
+  pgadmin:                                   # PgAdmin 데이터를 위한 볼륨
