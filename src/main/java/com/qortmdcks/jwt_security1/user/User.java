@@ -3,9 +3,11 @@ package com.qortmdcks.jwt_security1.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,7 +15,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User  implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
@@ -26,32 +28,37 @@ public class User implements UserDetails {
     private Role role;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() { // 계정이 가지고 있는 권한 목록 확인
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
-    public String getUsername() { // 계정 이름 리턴
-        return null;
+    public String getUsername() {
+        return email;
     }
 
     @Override
-    public boolean isAccountNonExpired() { // 계정이 만료됐는지 리턴 -> true는 완료되지 않음 의미
-        return false;
+    public String getPassword(){
+        return password;
     }
 
     @Override
-    public boolean isAccountNonLocked() { // 계정이 잠겨있는지 리턴 -> true는 잠기지 않음
-        return false;
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() { //비밀번호가 만료됐는지 리턴 -> true는 만료X 의미
-        return false;
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
     @Override
-    public boolean isEnabled() { // 계정이 활성화돼 있는지 리턴 -> tru는 활성화 상태 의미
-        return false;
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

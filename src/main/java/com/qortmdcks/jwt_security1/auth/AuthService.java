@@ -22,6 +22,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+
     public ResponseEntity<?> register(RegisterRequest request){
 
         var user = User.builder()
@@ -34,6 +35,7 @@ public class AuthService {
 
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User register successfully"));
+
     }
 
     public AuthResponse login(LoginRequest request){
@@ -54,6 +56,7 @@ public class AuthService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+
     }
 
     private void savedUserToken(User user, String jwtToken){
