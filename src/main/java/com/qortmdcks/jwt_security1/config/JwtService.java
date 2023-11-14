@@ -36,6 +36,10 @@ public class JwtService {
     }
 
 
+<<<<<<< HEAD
+    // 토큰 생성
+=======
+>>>>>>> 04caf479ea172348a08b607861dc7033011255d5
     public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(), userDetails);
     } // 기준
@@ -63,6 +67,25 @@ public class JwtService {
     }
 
 
+<<<<<<< HEAD
+
+
+    // 토큰 검증
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()));
+    }
+
+    private boolean isTokenValid(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+=======
+>>>>>>> 04caf479ea172348a08b607861dc7033011255d5
     public  Claims extractAllClaims(String token){
         return Jwts
                 .parserBuilder()
