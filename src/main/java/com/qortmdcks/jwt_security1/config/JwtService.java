@@ -65,8 +65,6 @@ public class JwtService {
 
 
 
-
-
     // 토큰 검증
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
